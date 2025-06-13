@@ -1,2 +1,3 @@
+#Comando para iniciar o Docker
 docker compose down -v  # para garantir que nada antigo fique pendente
 docker compose up --build
