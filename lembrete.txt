@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
 #Comando para iniciar o Docker
-=======
-#Para rodar o docker
->>>>>>> Stashed changes
 docker compose down -v  # para garantir que nada antigo fique pendente
 docker compose up --build
