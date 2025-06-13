@@ -1,7 +1,8 @@
 import google.generativeai as genai
 from dotenv import dotenv_values
+import os
 
-config = dotenv_values(".env")
+config = dotenv_values(os.path.join(os.path.dirname(__file__), ".env"))
 GEMINI_API_KEY = config.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("Erro: variável de ambiente GEMINI_API_KEY não está definida")

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import oi
+from .views import gerar_planejamento
 
 urlpatterns = [
-    path('', oi),
+    path('gerar-planejamento/', gerar_planejamento),
 ]
