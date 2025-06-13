@@ -1,3 +1,5 @@
 #Comando para iniciar o Docker
 docker compose down -v  # para garantir que nada antigo fique pendente
 docker compose up --build
+
+curl -X POST "http://localhost:8000/api/gerar-planejamento/" -H "Content-Type: application/json" --data "{\"materias\": [\"Matemática\", \"História\"], \"horarios_aula\": { \"Matemática\": [\"segunda 10:00-12:00\"], \"História\": [\"terça 14:00-16:00\"] }, \"provas\": [{\"materia\": \"História\", \"data\": \"2025-06-18\"}], \"hobbies\": [\"violão\"], \"hora_acorda\": \"07:30\"}"

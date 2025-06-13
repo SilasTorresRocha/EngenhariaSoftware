@@ -6,4 +6,4 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./assistente-backend/api/.env
+      - ./api/.env

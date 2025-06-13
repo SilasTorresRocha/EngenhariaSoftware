@@ -1,6 +1,8 @@
 import google.generativeai as genai
 from dotenv import dotenv_values
 import os
+import json
+import re
 
 config = dotenv_values(os.path.join(os.path.dirname(__file__), ".env"))
 GEMINI_API_KEY = config.get("GEMINI_API_KEY")
@@ -10,23 +12,22 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash") 
 
-def gerar_planejamento_semana(dados_usuario: dict) -> dict:
+def gerar_planejamento_com_ia(dados_usuario: dict) -> dict:
+    prompt = f"""Gere um planejamento semanal baseado na rotina abaixo. Retorne apenas um JSON puro, sem explicações ou comentários. Aqui estão os dados do usuário:
+{json.dumps(dados_usuario)}
+"""
+
     try:
-        # Transforma o dicionário em texto json
-        json_texto = str(dados_usuario).replace("'", '"')  # simples, mas funcional
-        prompt = (
-            f"Gere um planejamento semanal baseado na seguinte rotina do estudante.\n"
-            f"Formato da entrada:\n{json_texto}\n"
-            f"Devolva APENAS um JSON com o planejamento. Não inclua explicações ou comentários."
-        )
-
         response = model.generate_content(prompt)
+        texto = response.text or ""
 
-        if response.text:
-            import json
-            return json.loads(response.text)  # Retorna como dicionário
-        else:
-            return {"erro": "Resposta vazia do Gemini"}
+        # 🔧 Remove blocos de markdown ```json ... ``` se existirem
+        if texto.strip().startswith("```"):
+            texto = re.sub(r"^```[a-zA-Z]*\n", "", texto.strip())  # remove início ```json
+            texto = re.sub(r"\n```$", "", texto.strip())           # remove final ```
+
+        planejamento = json.loads(texto)
+        return planejamento
 
     except Exception as e:
         return {"erro": f"Erro na comunicação com o Gemini: {str(e)}"}
