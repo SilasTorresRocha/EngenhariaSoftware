@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+def oi(request):
+    return JsonResponse({'message': 'Teste de  planner!'})
+
