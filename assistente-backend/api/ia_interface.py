@@ -39,7 +39,7 @@ Formato de saída esperado:
         response = model.generate_content(prompt)
         texto = response.text or ""
 
-        # 🔧 Remove blocos de markdown ```json ... ``` se existirem
+        #Remove blocos de markdown ```json ... ``` se existirem
         if texto.strip().startswith("```"):
             texto = re.sub(r"^```[a-zA-Z]*\n", "", texto.strip())  # remove início ```json
             texto = re.sub(r"\n```$", "", texto.strip())           # remove final ```
