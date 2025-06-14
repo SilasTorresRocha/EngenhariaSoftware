@@ -1,9 +1,31 @@
 services:
+  bd:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: bd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senha
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   web:
     build: .
     volumes:
       - .:/app
     ports:
       - "8000:8000"
+    depends_on:
+      - bd
     env_file:
       - ./api/.env
+    environment:
+      - DJANGO_DB_HOST=bd
+      - DJANGO_DB_NAME=bd
+      - DJANGO_DB_USER=postgres
+      - DJANGO_DB_PASSWORD=senha
+
+volumes:
+  postgres_data:
