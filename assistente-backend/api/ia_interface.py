@@ -18,7 +18,7 @@ def gerar_planejamento_com_ia(dados_usuario: dict) -> dict:
 Aqui estão os dados do usuário:
 {json.dumps(dados_usuario, indent=2, ensure_ascii=False)}
 
-Cada dia da semana deve conter: "horario": "07:00-07:30", "atividade": "descrição da atividade"
+Cada dia da semana deve seguir o exemplo: "horario": "12:00-12:30", "atividade": "descrição da atividade"
 
 Formato de saída esperado:
 {{
