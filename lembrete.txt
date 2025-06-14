@@ -48,7 +48,7 @@ curl -X POST "http://localhost:8000/api/gerar-planejamento/" ^
 
 {
   "horarios": {
-    "Segunda": [],
+    "Segunda": [{"materia": "nome materia", "horario": "09:00-11:10"},],
     "Terça": [],
     "Quarta": [],
     "Quinta": [],

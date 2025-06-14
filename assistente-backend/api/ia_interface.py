@@ -13,9 +13,27 @@ genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash") 
 
 def gerar_planejamento_com_ia(dados_usuario: dict) -> dict:
-    prompt = f"""Gere um planejamento semanal baseado na rotina abaixo. Retorne apenas um JSON puro, sem explicações ou comentários. Aqui estão os dados do usuário:
-{json.dumps(dados_usuario)}
+    prompt = f"""Gere um planejamento semanal baseado na rotina abaixo. Retorne apenas um JSON puro, sem explicações ou comentários.
+
+Aqui estão os dados do usuário:
+{json.dumps(dados_usuario, indent=2, ensure_ascii=False)}
+
+Cada dia da semana deve conter: "horario": "07:00-07:30", "atividade": "descrição da atividade"
+
+Formato de saída esperado:
+{{
+  "horarios": {{
+    "Segunda": [],
+    "Terça": [],
+    "Quarta": [],
+    "Quinta": [],
+    "Sexta": [],
+    "Sábado": [],
+    "Domingo": []
+  }}
+}}
 """
+
 
     try:
         response = model.generate_content(prompt)
