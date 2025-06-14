@@ -1,2 +1,75 @@
+#Comando para iniciar o Docker
 docker compose down -v  # para garantir que nada antigo fique pendente
 docker compose up --build
+
+curl -X POST "http://localhost:8000/api/gerar-planejamento/" -H "Content-Type: application/json" --data "{\"materias\": [\"Matemática\", \"História\"], \"horarios_aula\": { \"Matemática\": [\"segunda 10:00-12:00\"], \"História\": [\"terça 14:00-16:00\"] }, \"provas\": [{\"materia\": \"História\", \"data\": \"2025-06-18\"}], \"hobbies\": [\"violão\"], \"hora_acorda\": \"07:30\"}"
+
+
+
+Modelop json:
+{
+  "horarios": {
+    "Segunda": [
+      { "materia": "EDO", "horario": "09:00-11:10" },
+      { "materia": "Cálculo 3", "horario": "11:10-12:50" },
+      { "materia": "Relações de Liderança", "horario": "13:00-14:40" },
+      { "materia": "Física 3", "horario": "14:40-16:40" }
+    ],
+    "Terça": [
+      { "materia": "Cálculo 3", "horario": "07:30-09:10" },
+      { "materia": "Física 3", "horario": "13:00-14:40" },
+      { "materia": "Engenharia de Software", "horario": "14:40-16:40" }
+    ],
+    "Quarta": [
+      { "materia": "História do Brasil", "horario": "10:20-12:00" },
+      { "materia": "Física Experimental", "horario": "16:00-17:40" }
+    ],
+    "Quinta": [
+      { "materia": "EDO", "horario": "09:00-11:10" }
+    ],
+    "Sexta": [
+      { "materia": "Teoria da Computação", "horario": "10:00-12:50" },
+      { "materia": "Engenharia de Software", "horario": "15:50-17:30" }
+    ],
+    "Sábado": [],
+    "Domingo": []
+  },
+  "hobbies": [
+    "Projetos: catraca na UTFPT,Projeto pessoal: desenvolvimento de CNC router, Estudo: desenvolvimento web para um projeto futuro"
+  ],
+  "observacoes": "Gostaria de organizar melhor meu dia, aproveitando os intervalos entre aulas. Normalmente levo uns 20 minutos entre casa e faculdade. Na faculdade há almoço, que pode variar entre 15 e 40 minutos dependendo do horário. Para o projeto CNC, já tenho o modelo em 3D e quase todas as peças (eletrônica e estrutural) prontas. O prazo da catraca é até o final do ano. No projeto web, comprei um curso de 100 horas e quero concluí-lo até o meio do ano. Além disso, gosto de assistir anime para relaxar."
+}
+
+curl -X POST "http://localhost:8000/api/gerar-planejamento/" ^
+     -H "Content-Type: application/json" ^
+     --data "{ \"horarios\": { \"Segunda\": [ { \"materia\": \"EDO\", \"horario\": \"09:00-11:10\" }, { \"materia\": \"Cálculo 3\", \"horario\": \"11:10-12:50\" }, { \"materia\": \"Relações de Liderança\", \"horario\": \"13:00-14:40\" }, { \"materia\": \"Física 3\", \"horario\": \"14:40-16:40\" } ], \"Terça\": [ { \"materia\": \"Cálculo 3\", \"horario\": \"07:30-09:10\" }, { \"materia\": \"Física 3\", \"horario\": \"13:00-14:40\" }, { \"materia\": \"Engenharia de Software\", \"horario\": \"14:40-16:40\" } ], \"Quarta\": [ { \"materia\": \"História do Brasil\", \"horario\": \"10:20-12:00\" }, { \"materia\": \"Física Experimental\", \"horario\": \"16:00-17:40\" } ], \"Quinta\": [ { \"materia\": \"EDO\", \"horario\": \"09:00-11:10\" } ], \"Sexta\": [ { \"materia\": \"Teoria da Computação\", \"horario\": \"10:00-12:50\" }, { \"materia\": \"Engenharia de Software\", \"horario\": \"15:50-17:30\" } ], \"Sábado\": [], \"Domingo\": [] }, \"hobbies\": [ \"Projetos: catraca na UTFPT\", \"Projeto pessoal: desenvolvimento de CNC router\", \"Estudo: desenvolvimento web para um projeto futuro\" ], \"observacoes\": \"Gostaria de organizar melhor meu dia, aproveitando os intervalos entre aulas. Normalmente levo uns 20 minutos entre casa e faculdade. Na faculdade há almoço, que pode variar entre 15 e 40 minutos dependendo do horário. Para o projeto CNC, já tenho o modelo em 3D e quase todas as peças (eletrônica e estrutural) prontas. O prazo da catraca é até o final do ano. No projeto web, comprei um curso de 100 horas e quero concluí-lo até o meio do ano. Além disso, gosto de assistir anime para relaxar.\" }"
+
+#aquivo a ser enviado:
+
+{
+  "horarios": {
+    "Segunda": [{"materia": "nome materia", "horario": "09:00-11:10"},],
+    "Terça": [],
+    "Quarta": [],
+    "Quinta": [],
+    "Sexta": [],
+    "Sábado": [],
+    "Domingo": []
+  },
+  "hobbies": [],
+  "observacoes": ""
+}
+
+# modelo para receber
+{
+  "horarios": {
+    "Segunda": [],
+    "Terça": [],
+    "Quarta": [],
+    "Quinta": [],
+    "Sexta": [],
+    "Sábado": [],
+    "Domingo": []
+  }
+}
+

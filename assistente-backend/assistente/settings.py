@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'planner',
     'rest_framework',
+    'api'
 ]
 
 MIDDLEWARE = [
