@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import PlanejamentoRequestSerializer
 from .ia_interface import gerar_planejamento_com_ia
-from .models import Usuario 
+from .models import Usuario
+from .serializers import UsuarioSerializer 
 
 @api_view(['POST'])
 def gerar_planejamento(request):
@@ -31,4 +32,20 @@ class ValidarUsuarioView(APIView):
             return Response({'isValid': True}, status=200)
         else:
             return Response({'isValid': False, 'message': 'Usuário não encontrado'}, status=404)
+
+class CriarUsuarioView(APIView):
+    def post(self, request):
+        serializer = UsuarioSerializer(data=request.data)
+
+        if serializer.is_valid():
+            nome = serializer.validated_data['nome']
+            
+            # Verifica se já existe
+            if Usuario.objects.filter(nome=nome).exists():
+                return Response({'message': 'Usuário já existe'}, status=400)
+            
+            serializer.save()
+            return Response({'message': 'Usuário criado com sucesso'}, status=201)
+
+        return Response(serializer.errors, status=400)
 

@@ -74,3 +74,13 @@ curl -X POST "http://localhost:8000/api/gerar-planejamento/" ^
 }
 
 
+docker stop $(docker ps -aq)  # Para todos os containers
+docker rm $(docker ps -aq)    # Remove todos os containers
+
+
+ADD USUARIO: {"nome": "novo_usuario"}
+
+BUSCAR NO BANCO:
+{
+  "username": "teste"
+}

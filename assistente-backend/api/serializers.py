@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import Usuario
 
 class HorarioMateriaSerializer(serializers.Serializer):
     materia = serializers.CharField()
@@ -20,3 +21,8 @@ class PlanejamentoRequestSerializer(serializers.Serializer):
     horarios = DiasDaSemanaSerializer()
     hobbies = serializers.ListField(child=serializers.CharField())
     observacoes = serializers.CharField()
+
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['nome']
