@@ -17,6 +17,11 @@ caso nao exista
 
 psql -U postgres -c "CREATE DATABASE bd;"
 
+caso nao exista:
+
+psql -U postgres -c "CREATE DATABASE bd;"
+
+
 psql -U postgres -d bd -f backup.sql
 
 
