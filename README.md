@@ -13,6 +13,10 @@ Restaurar o backu.sql para o banco
 
 psql -U postgres -d bd -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 
+caso nao exista
+
+psql -U postgres -c "CREATE DATABASE bd;"
+
 psql -U postgres -d bd -f backup.sql
 
 
