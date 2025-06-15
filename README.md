@@ -21,3 +21,18 @@ psql -U postgres -c "CREATE DATABASE bd;"
 psql -U postgres -d bd -f backup.sql
 
 
+
+
+*Linux{
+(settings.py)
+
+'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),  
+
+(docker-compose.yml)
+
+environment:
+      - DJANGO_DB_HOST=SEU_IP_DA_MAQUINA_HOST # Ex: 192.168.1.100 (o IP do seu Linux)
+      
+}
+
+
