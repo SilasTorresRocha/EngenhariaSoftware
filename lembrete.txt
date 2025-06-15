@@ -79,7 +79,13 @@ docker stop $(docker ps -aq)  # Para todos os containers
 docker rm $(docker ps -aq)    # Remove todos os containers
 
 
+
+http://localhost:8000/api/criarUsuario
+
 ADD USUARIO: {"nome": "novo_usuario"}
+
+
+http://localhost:8000/api/validarUsuario
 
 BUSCAR NO BANCO:
 {
