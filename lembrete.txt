@@ -80,12 +80,12 @@ docker rm $(docker ps -aq)    # Remove todos os containers
 
 
 
-http://localhost:8000/api/criarUsuario
+http://localhost:8000/criarUsuario
 
 ADD USUARIO: {"nome": "novo_usuario"}
 
 
-http://localhost:8000/api/validarUsuario
+http://localhost:8000/api/validarUsuario (Fornecido pelo Frontend)
 
 BUSCAR NO BANCO:
 {
