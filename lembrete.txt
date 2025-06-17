@@ -48,7 +48,7 @@ curl -X POST "http://localhost:8000/api/gerar-planejamento/" ^
 
 {
   "horarios": {
-    "Segunda": [{"materia": "nome materia", "horario": "09:00-11:10"},],
+    "Segunda": [{"materia": "Calculo Diferencial e Integral 4", "horario": "09:00-11:10"},{"materia": "Fisica 4", "horario": "12:00-13:00"}],
     "Terça": [],
     "Quarta": [],
     "Quinta": [],
@@ -80,7 +80,7 @@ docker rm $(docker ps -aq)    # Remove todos os containers
 
 
 
-http://localhost:8000/api/criarUsuario
+http://localhost:8000/criarUsuario
 
 ADD USUARIO: {"nome": "novo_usuario"}
 
@@ -90,4 +90,48 @@ http://localhost:8000/api/validarUsuario
 BUSCAR NO BANCO:
 {
   "username": "teste"
+}
+
+
+
+
+Entrada esperada:
+POST /api/sincronizarProvasTrabalhos
+
+{
+  "usuario": "teste",
+  "provas": [
+    {
+      "materia": "Matemática",
+      "data": "2025-06-30",
+      "descricao": "Prova final"
+    }
+  ],
+  "trabalhos": [
+    {
+      "materia": "História",
+      "data_entrega": "2025-07-05",
+      "descricao": "Trabalho sobre 2ª Guerra"
+    }
+  ]
+}
+
+Resposta devolvida:
+GET /api/provasTrabalhos?usuario=teste
+
+{
+  "provas": [
+    {
+      "materia": "Matemática",
+      "data": "2025-06-30",
+      "descricao": "Prova final"
+    }
+  ],
+  "trabalhos": [
+    {
+      "materia": "História",
+      "data_entrega": "2025-07-05",
+      "descricao": "Trabalho 2ª Guerra"
+    }
+  ]
 }

@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import PlanejamentoRequestSerializer
 from .ia_interface import gerar_planejamento_com_ia
-from .models import Usuario
-from .serializers import UsuarioSerializer 
+from .models import Usuario, Materia, Prova, Trabalho
+from .serializers import UsuarioSerializer, ProvasTrabalhosRequestSerializer
 
 @api_view(['POST'])
 def gerar_planejamento(request):
@@ -48,4 +48,50 @@ class CriarUsuarioView(APIView):
             return Response({'message': 'Usuário criado com sucesso'}, status=201)
 
         return Response(serializer.errors, status=400)
+
+class SincronizarProvasTrabalhosView(APIView):
+    def post(self, request):
+        serializer = ProvasTrabalhosRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        dados = serializer.validated_data
+        nome_usuario = dados['usuario']
+
+        usuario, _ = Usuario.objects.get_or_create(nome=nome_usuario)
+
+        # Dicionário: nome da matéria -> instância
+        materias_dict = {}
+        for item in dados['provas'] + dados['trabalhos']:
+            nome_materia = item['materia']
+            if nome_materia not in materias_dict:
+                materia, _ = Materia.objects.get_or_create(nome=nome_materia, usuario=usuario)
+                materias_dict[nome_materia] = materia
+
+        # Apagar provas/trabalhos existentes dessas matérias
+        for materia in materias_dict.values():
+            Prova.objects.filter(materia=materia).delete()
+            Trabalho.objects.filter(materia=materia).delete()
+
+        # Criar novas provas
+        novas_provas = [
+            Prova(
+                materia=materias_dict[p['materia']],
+                data=p['data'],
+                descricao=p['descricao']
+            ) for p in dados['provas']
+        ]
+        Prova.objects.bulk_create(novas_provas)
+
+        # Criar novos trabalhos
+        novos_trabalhos = [
+            Trabalho(
+                materia=materias_dict[t['materia']],
+                data_entrega=t['data_entrega'],
+                descricao=t['descricao']
+            ) for t in dados['trabalhos']
+        ]
+        Trabalho.objects.bulk_create(novos_trabalhos)
+
+        return Response({"status": "sincronizado com sucesso"}, status=200)
 

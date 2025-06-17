@@ -26,3 +26,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['nome']
+
+class ProvaSerializer(serializers.Serializer):
+    materia = serializers.CharField()
+    data = serializers.DateField()
+    descricao = serializers.CharField()
+
+class TrabalhoSerializer(serializers.Serializer):
+    materia = serializers.CharField()
+    data_entrega = serializers.DateField()
+    descricao = serializers.CharField()
+
+class ProvasTrabalhosRequestSerializer(serializers.Serializer):
+    usuario = serializers.CharField()
+    provas = ProvaSerializer(many=True)
+    trabalhos = TrabalhoSerializer(many=True)
