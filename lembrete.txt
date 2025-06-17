@@ -85,7 +85,7 @@ http://localhost:8000/criarUsuario
 ADD USUARIO: {"nome": "novo_usuario"}
 
 
-http://localhost:8000/api/validarUsuario
+http://localhost:8000/api/validarUsuario (Fornecido pelo Frontend)
 
 BUSCAR NO BANCO:
 {
