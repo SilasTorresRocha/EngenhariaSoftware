@@ -27,9 +27,7 @@ DEBUG = True
 
 
 # Verifica se assim funciona com o frontend ?
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 ALLOWED_HOSTS = []
