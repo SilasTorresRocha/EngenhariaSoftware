@@ -31,7 +31,7 @@ psql -U postgres -d bd -f backup.sql
 (docker-compose.yml)
 
 environment:
-      - DJANGO_DB_HOST=SEU_IP_DA_MAQUINA_HOST # Ex: 192.168.1.100 (o IP do seu Linux)
+      - DJANGO_DB_HOST=SEU_IP_DA_MAQUINA_HOST # 192.168.1.100 
       
 }
 
