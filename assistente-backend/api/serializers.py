@@ -41,3 +41,21 @@ class ProvasTrabalhosRequestSerializer(serializers.Serializer):
     usuario = serializers.CharField()
     provas = ProvaSerializer(many=True)
     trabalhos = TrabalhoSerializer(many=True)
+
+
+class ProvaResponseSerializer(serializers.Serializer):
+    materia = serializers.CharField()
+    data = serializers.DateField()
+    descricao = serializers.CharField()
+
+class TrabalhoResponseSerializer(serializers.Serializer):
+    materia = serializers.CharField()
+    data_entrega = serializers.DateField()
+    descricao = serializers.CharField()
+
+class SincronizacaoConsultaResponseSerializer(serializers.Serializer):
+    provas = ProvaResponseSerializer(many=True)
+    trabalhos = TrabalhoResponseSerializer(many=True)
+
+class UsuarioConsultaSerializer(serializers.Serializer):
+    usuario = serializers.CharField()

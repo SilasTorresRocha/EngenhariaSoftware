@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from .serializers import PlanejamentoRequestSerializer
 from .ia_interface import gerar_planejamento_com_ia
 from .models import Usuario, Materia, Prova, Trabalho
-from .serializers import UsuarioSerializer, ProvasTrabalhosRequestSerializer
+from .serializers import UsuarioSerializer, ProvasTrabalhosRequestSerializer, UsuarioConsultaSerializer
 
 @api_view(['POST'])
 def gerar_planejamento(request):
@@ -93,3 +93,58 @@ class SincronizarProvasTrabalhosView(APIView):
         ])
 
         return Response({"status": "sincronizado com sucesso"}, status=200)
+
+# views.py
+class ConsultarProvasTrabalhosView(APIView):
+    def post(self, request):
+        serializer = UsuarioConsultaSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        nome_usuario = serializer.validated_data['usuario']
+
+        try:
+            usuario = Usuario.objects.get(nome=nome_usuario)
+        except Usuario.DoesNotExist:
+            return Response(
+                {"erro": "Usuário não encontrado"},
+                status=404
+            )
+
+        materias = Materia.objects.filter(usuario=usuario)
+
+        if not materias.exists():
+            return Response(
+                {"erro": "Usuário não possui provas ou trabalhos cadastrados"},
+                status=404
+            )
+
+        provas = Prova.objects.filter(materia__in=materias)
+        trabalhos = Trabalho.objects.filter(materia__in=materias)
+
+        if not provas.exists() and not trabalhos.exists():
+            return Response(
+                {"erro": "Usuário não possui provas ou trabalhos cadastrados"},
+                status=404
+            )
+
+        provas_data = [
+            {
+                "materia": prova.materia.nome,
+                "data": prova.data,
+                "descricao": prova.descricao
+            } for prova in provas
+        ]
+
+        trabalhos_data = [
+            {
+                "materia": trabalho.materia.nome,
+                "data_entrega": trabalho.data_entrega,
+                "descricao": trabalho.descricao
+            } for trabalho in trabalhos
+        ]
+
+        return Response({
+            "provas": provas_data,
+            "trabalhos": trabalhos_data
+        }, status=200)
