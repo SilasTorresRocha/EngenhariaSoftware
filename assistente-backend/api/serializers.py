@@ -18,9 +18,11 @@ class DiasDaSemanaSerializer(serializers.Serializer):
     Domingo = HorarioMateriaSerializer(many=True)
 
 class PlanejamentoRequestSerializer(serializers.Serializer):
-    horarios = DiasDaSemanaSerializer()
-    hobbies = serializers.ListField(child=serializers.CharField())
-    observacoes = serializers.CharField()
+    usuario = serializers.CharField()
+    horarios = serializers.DictField()
+    hobbies = serializers.ListField(child=serializers.CharField(), required=False)
+    observacoes = serializers.CharField(required=False, allow_blank=True)
+
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:

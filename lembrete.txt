@@ -156,3 +156,6 @@ Se o usuario nao existir:
 
 Se o usuario existir mas nao tiver provas nem trabalhos:
 { "erro": "Usuário não possui provas ou trabalhos cadastrados" }
+
+
+consultar-planejamento/:

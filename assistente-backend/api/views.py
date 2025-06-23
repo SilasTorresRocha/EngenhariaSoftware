@@ -4,22 +4,54 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import PlanejamentoRequestSerializer
 from .ia_interface import gerar_planejamento_com_ia
-from .models import Usuario, Materia, Prova, Trabalho
+from .models import Usuario, Materia, Prova, Trabalho, PlanejamentoSemanal
 from .serializers import UsuarioSerializer, ProvasTrabalhosRequestSerializer, UsuarioConsultaSerializer
+from django.db import transaction
 
 @api_view(['POST'])
 def gerar_planejamento(request):
     serializer = PlanejamentoRequestSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     dados = serializer.validated_data
-    planejamento = gerar_planejamento_com_ia(dados)
+    nome_usuario = dados.get("usuario")
+    
+    try:
+        usuario = Usuario.objects.get(nome=nome_usuario)
+    except Usuario.DoesNotExist:
+        return Response({"erro": "Usuário não encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
-    if "erro" in planejamento:
-        return Response(planejamento, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    planejamento_gerado = gerar_planejamento_com_ia(dados)
+    if "erro" in planejamento_gerado:
+        return Response(planejamento_gerado, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    return Response(planejamento, status=status.HTTP_200_OK)
+    try:
+        with transaction.atomic():
+            # Apaga se já existir
+            PlanejamentoSemanal.objects.filter(usuario=usuario).delete()
+            PlanejamentoSemanal.objects.create(usuario=usuario, atividades=planejamento_gerado)
+    except Exception as e:
+        return Response({"erro": f"Erro ao salvar no banco: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response(planejamento_gerado, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def consultar_planejamento(request):
+    nome = request.data.get("usuario")
+    if not nome:
+        return Response({"erro": "Campo 'usuario' é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        usuario = Usuario.objects.get(nome=nome)
+    except Usuario.DoesNotExist:
+        return Response({"erro": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+    planejamento = PlanejamentoSemanal.objects.filter(usuario=usuario).first()
+    if not planejamento:
+        return Response({"erro": "Nenhum planejamento encontrado para este usuário."}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response(planejamento.atividades, status=status.HTTP_200_OK)
 
 
 class ValidarUsuarioView(APIView):
