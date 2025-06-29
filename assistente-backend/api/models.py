@@ -30,3 +30,10 @@ class Trabalho(models.Model):
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
     data_entrega = models.DateField()
     descricao = models.TextField()
+
+class PlanejamentoSemanal(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    atividades = models.JSONField()
+
+    class Meta:
+        db_table = 'planejamentosemanal'
